@@ -57,7 +57,7 @@ const Header: React.FC = () => {
   }
 
   const HomeLink: React.FC<{ children: React.ReactNode; className?: string; onClick?: () => void }> = ({ children, className, onClick }) => (
-    <Link to="/" className={className} onClick={(e) => {
+    <Link to="/" className={className} onClick={() => {
       window.scrollTo(0, 0)
       onClick && onClick()
     }}>
