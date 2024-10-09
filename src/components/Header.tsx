@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Link as ScrollLink } from 'react-scroll'
 import { Menu, X, Globe } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useLanguage } from '@/contexts/LanguageContext'
+import viteLogo from '/vite.svg'
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -45,33 +46,52 @@ const Header: React.FC = () => {
       )
     }
     return (
-      <RouterLink
+      <Link
         to={`/#${to}`}
         className={className}
         onClick={onClick}
       >
         {children}
-      </RouterLink>
+      </Link>
     )
   }
+
+  const HomeLink: React.FC<{ children: React.ReactNode; className?: string; onClick?: () => void }> = ({ children, className, onClick }) => (
+    <Link to="/" className={className} onClick={(e) => {
+      window.scrollTo(0, 0)
+      onClick && onClick()
+    }}>
+      {children}
+    </Link>
+  )
 
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
         <div className="container mx-auto flex h-20 items-center justify-between px-4">
-          <NavLink to="home" onClick={() => {}} className="flex items-center space-x-2 cursor-pointer">
+          <HomeLink className="flex items-center space-x-2 cursor-pointer">
+            <img src={viteLogo} alt="Vite logo" className="h-8 w-8" />
             <span className="font-bold text-xl text-primary">Afterthinking</span>
-          </NavLink>
+          </HomeLink>
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium">
             {navItems.map((item) => (
-              <NavLink
-                key={item.key}
-                to={item.key}
-                onClick={() => {}}
-                className="transition-colors hover:text-primary text-foreground/80 cursor-pointer"
-              >
-                {item.label}
-              </NavLink>
+              item.key === 'home' ? (
+                <HomeLink
+                  key={item.key}
+                  className="transition-colors hover:text-primary text-foreground/80 cursor-pointer"
+                >
+                  {item.label}
+                </HomeLink>
+              ) : (
+                <NavLink
+                  key={item.key}
+                  to={item.key}
+                  onClick={() => {}}
+                  className="transition-colors hover:text-primary text-foreground/80 cursor-pointer"
+                >
+                  {item.label}
+                </NavLink>
+              )
             ))}
           </nav>
           <div className="flex items-center space-x-4">
@@ -100,9 +120,10 @@ const Header: React.FC = () => {
         <div className="fixed inset-0 z-[100] bg-white md:hidden overflow-y-auto">
           <div className="flex flex-col min-h-screen">
             <div className="flex items-center justify-between p-4 border-b">
-              <NavLink to="home" onClick={toggleMenu} className="flex items-center space-x-2">
+              <HomeLink className="flex items-center space-x-2" onClick={toggleMenu}>
+                <img src={viteLogo} alt="Vite logo" className="h-6 w-6" />
                 <span className="font-bold text-lg text-primary">Afterthinking</span>
-              </NavLink>
+              </HomeLink>
               <Button
                 variant="ghost"
                 size="icon"
@@ -113,14 +134,24 @@ const Header: React.FC = () => {
             </div>
             <nav className="flex flex-col items-center justify-center flex-grow py-8">
               {navItems.map((item) => (
-                <NavLink
-                  key={item.key}
-                  to={item.key}
-                  onClick={toggleMenu}
-                  className="text-2xl font-semibold py-4 hover:text-primary transition-colors w-full text-center"
-                >
-                  {item.label}
-                </NavLink>
+                item.key === 'home' ? (
+                  <HomeLink
+                    key={item.key}
+                    className="text-2xl font-semibold py-4 hover:text-primary transition-colors w-full text-center"
+                    onClick={toggleMenu}
+                  >
+                    {item.label}
+                  </HomeLink>
+                ) : (
+                  <NavLink
+                    key={item.key}
+                    to={item.key}
+                    onClick={toggleMenu}
+                    className="text-2xl font-semibold py-4 hover:text-primary transition-colors w-full text-center"
+                  >
+                    {item.label}
+                  </NavLink>
+                )
               ))}
               <Button 
                 variant="ghost" 
